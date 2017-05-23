@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker build -f haproxy.dockerfile -t foogaro/haproxy:1.5.18 .

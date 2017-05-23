@@ -1,0 +1,1 @@
+docker run -ti --rm="true" --name="haproxy" --net="jdv" -p 80:80 -p 31000:31000 -p 35433:35432 foogaro/haproxy:1.5.18
