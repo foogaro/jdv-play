@@ -1,0 +1,7 @@
+batch
+module add --name=jdbc.mysql --slot=main --resources=/opt/rh/mysql-connector-java-5.1.40-bin.jar --dependencies=javax.api,javax.transaction.api
+/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=jdbc.mysql,driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource,driver-datasource-class-name=com.mysql.jdbc.Driver)
+/subsystem=datasources/data-source=MySQLDS:add(driver-name=mysql,min-pool-size=5,max-pool-size=50,jndi-name="java:/MySQLDS",background-validation=true,connection-url="jdbc:mysql://DOCKER_MYSQL_IP:DOCKER_MYSQL_PORT/DOCKER_MYSQL_DBNAME?useSSL=false",enabled=true,pool-prefill=true,user-name=root,password=root,statistics-enabled=true,jta=true,check-valid-connection-sql="SELECT 1")
+/subsystem=datasources/data-source=MySQLDS:enable()
+run-batch
+:shutdown(restart=true)

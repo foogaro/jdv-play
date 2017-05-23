@@ -1,0 +1,5 @@
+batch
+/subsystem=infinispan/cache-container=teiid-cache:write-attribute(name=default-cache,value=jdv-cluster-repl)
+/subsystem=teiid:write-attribute(name=distributed-cache-jgroups-stack,value=udp)
+run-batch
+:shutdown(restart=true)

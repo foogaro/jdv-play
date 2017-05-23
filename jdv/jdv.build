@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker build -f jdv.dockerfile -t foogaro/jdv:6.3.5 .

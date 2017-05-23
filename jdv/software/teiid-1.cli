@@ -1,0 +1,2 @@
+/subsystem=infinispan/cache-container=teiid-cache/transport=TRANSPORT:add(lock-timeout=60000,stack=udp)
+:shutdown(restart=true)

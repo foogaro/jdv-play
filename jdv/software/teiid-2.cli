@@ -1,0 +1,6 @@
+batch
+/subsystem=infinispan/cache-container=teiid-cache/replicated-cache=jdv-cluster-repl:add(mode=SYNC,batching=true,statistics-enabled=true)
+/subsystem=infinispan/cache-container=teiid-cache/replicated-cache=jdv-cluster-repl/locking=LOCKING:add(isolation=READ_COMMITTED)
+/subsystem=infinispan/cache-container=teiid-cache/replicated-cache=jdv-cluster-repl/transaction=TRANSACTION:add(mode=NON_XA)
+run-batch
+:shutdown(restart=true)
