@@ -20,8 +20,11 @@ It's important that we all speak the same language, or at least we mean the same
 | DDL       | It stands for **D**ata **D**efinition **L**anguage, it is used to define the database structure or schema. |
 | DML       | It stands for **D**ata **M**anipulation **L**anguage, it is used for managing data within schema objects. |
 | NOSQL     | It stands for **N**ot **O**nly **SQL**, it is a kind of a database, which provides a mechanism for storage and retrieval of data which is modeled in means other than the tabular relations used in relational databases. |
-| JDV       | It stands for JBoss Data Virtualization. [See more](#Overview)|
-| DV        | It stands for Data Virtualization, it is used as synonymous of JDV. |
+| JDV       | It stands for **JB**oss **D**ata **V**irtualization. [See more](#Overview)|
+| DV        | It stands for **D**ata **V**irtualization, it is used as synonymous of JDV. |
+| VDB       | It stands for **V**irtual **D**ata**b**ase, it is the deployment unit of a JDV project. |
+| IDE       | It stands for **I**ntegrated **D**evelopment **E**nvironment, it is a software application that provides comprehensive facilities to computer programmers for software development. |
+| JBDS      | It stands for **JB**oss **D**eveloper **S**tudio, it  is a development environment created and currently developed by Red Hat. |
 | Image     | It's meant to be the software stack, that will compose a runtime environment. In our scenario, it's meant to be a Docker image. |
 | Container | It's meant to be a Linux container, based on a spefici image. In our scenario a Docker container. |
 | Host      | It's meant to be the server running this repo, thus hosting Docker's image repository. |
@@ -96,7 +99,7 @@ docker network inspect jdv
 ### Build the RHEL base image
 
 All Docker images belong to this project are based on RHEL, so we first need to build tha base image.
-Edit the file named rhel.dockerfile and use your own credential to register your the Red Hat Network.
+In the folder "rhel", do edit the file named rhel.dockerfile and use your own credential to register to the Red Hat Network.
 Here is an example:
 
 ```bash
@@ -112,12 +115,16 @@ RUN yum -y update && yum clean all
 
 ```
 
+Once done, create your RHEL image by building you dockerfile, as follows:
+
+```bash
+docker build -f rhel.dockerfile -t foogaro/rhel .
+```
+
 
 ## MySQL
-
 First we will create a data container to store our database. Doing so, any update to MySQL will be kept locally on the host machine (that is your laptop running all this).
 Then, we will run a mysql container linking the data container. Once done, we will run the script to create and populate our database.
-I took the database from XXX's repo.
 
 ### Build the data container
 ```bash
@@ -205,49 +212,61 @@ And the count for each table should be as follows:
 
 
 ## JDV
-Make sure you have placed into the software folder, the following files:
+Make sure MySQL is up and running, and let it go.
+Also, make sure you have placed into the "jdv/software" folder, the following files:
 * jboss-dv-6.3.0-installer.jar
 * jboss-dv-6.3.5-patch.jar
+* jboss-dv-6.3.0-teiid-jdbc.jar
+* jboss-dv-psqlodbc-6.2.0-3.el7.x86_64.rpm
 * mysql-connector-java-5.1.40-bin.jar
 
 ### Build the image
 ```bash
-./jdv.build
+docker build -f jdv.dockerfile -t foogaro/jdv:6.3.5 .
 ```
+The above command is wrapped into the __jdv.build__ file.
+
 
 ### Run the container "jdv1"
 ```bash
-./jdv1.run
+docker run -it --rm="true" --name="jdv1" --link="mysql" --net="jdv" -p 18009:8009 -p 18080:8080 -p 19990:9990 -p 19999:9999 -p 14447:4447 -p 31100:31000 -p 35431:35432 -p 55210:55200/udp -e DOCKER_MYSQL_IP=172.18.0.2 -e DOCKER_MYSQL_PORT=3306 -e DOCKER_MYSQL_DBNAME=employees foogaro/jdv:6.3.5 -b 172.18.0.3 -bmanagement 172.18.0.3 --server-config=standalone-ha.xml -Djboss.node.name=JDV1
 ```
+The above command is wrapped into the __jdv1.run__ file.
 
 ### Configure the container "jdv1"
 ```bash
-./jdv1.configure
+docker exec -t jdv1 /opt/rh/configure.sh
 ```
 
 ### Run the container "jdv2"
 ```bash
-./jdv2.run
+docker run -it --rm="true" --name="jdv2" --link="mysql" --net="jdv" -p 28009:8009 -p 28080:8080 -p 29990:9990 -p 29999:9999 -p 24447:4447 -p 31200:31000 -p 35432:35432 -p 55220:55200/udp -e DOCKER_MYSQL_IP=172.18.0.2 -e DOCKER_MYSQL_PORT=3306 -e DOCKER_MYSQL_DBNAME=employees foogaro/jdv:6.3.5 -b 172.18.0.4 -bmanagement 172.18.0.4 --server-config=standalone-ha.xml -Djboss.node.name=JDV2
 ```
+The above command is wrapped into the __jdv1.run__ file.
 
 ### Configure the container "jdv2"
 ```bash
-./jdv2.configure
+docker exec -t jdv2 /opt/rh/configure.sh
 ```
 
+### JBoss Developer Studio project
+I'm not going to describe how to import database metadata, create views and all.
+In the reposiroty you can find the JBDS project into the workspace folder named _ws-jdv-play_. Have a look at it, and feel free to change and update whatever you want.
 
 ## HAProxy
 HAProxy is free, open source software that provides a high availability load balancer and proxy server for TCP and HTTP-based applications that spreads requests across multiple servers.
 
 ### Build the image
 ```bash
-./haproxy.build
+docker build -f haproxy.dockerfile -t foogaro/haproxy:1.5.18 .
 ```
+The above command is wrapped into the __haproxy.build__ file.
 
 ### Run the container "haproxy"
 ```bash
-./haproxy.run
+docker run -ti --rm="true" --name="haproxy" --net="jdv" -p 80:80 -p 31000:31000 -p 35433:35432 foogaro/haproxy:1.5.18
 ```
+The above command is wrapped into the __haproxy.run__ file.
 
 ### Status and statistics
 You can now access HAProxy's statistics page at the following URL (credentials are specified into the haproxy.cfg file):
@@ -322,7 +341,7 @@ docker network inspect jdv
 ```
 
 You can now access your Virtual Database from just one entrypoint, that is HAProxy, by using the protocol that best fits your needs.
-Connect to the "EMP" Virtual database using JDBC, ODBC, or the protocol you prefer, by pointing to the HAProxy's IP and port (JDBC=31000, ODBC=35432, OData=8080).
+Connect to the "EMP" Virtual database using JDBC, ODBC, or the protocol you prefer, by pointing to the HAProxy's IP and port (JDBC=31000, ODBC=35433, OData=8080).
 
 Now play around... and yes you are allowed to stop one server, start it back and stop the other one, and so on and so on.
 
