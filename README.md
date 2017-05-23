@@ -182,7 +182,9 @@ docker exec -ti mysql "mysql -u root -proot < /var/lib/mysql/employees.ddl"
 ```
 
 Not even the mysql-command wrapped into a executable file!
+
 I spent an afternoon, and it didn't work!
+
 Please send me a PR with the fix!
 
 ### Client SQL 
@@ -332,5 +334,5 @@ Luigi
 
 
 
-[ref-employees-db]: https://github.com/foogaro/jdv-play/db.png "Employees database reference"
-[ref-haproxy-stats]: https://github.com/foogaro/jdv-play/haproxy.png "HAProxy statistics reference"
+[ref-employees-db]: https://github.com/foogaro/jdv-play/blob/master/db.png "Employees database reference"
+[ref-haproxy-stats]: https://github.com/foogaro/jdv-play/blob/master/haproxy.png "HAProxy statistics reference"
