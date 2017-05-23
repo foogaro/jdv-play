@@ -341,6 +341,7 @@ docker network inspect jdv
 ```
 
 You can now access your Virtual Database from just one entrypoint, that is HAProxy, by using the protocol that best fits your needs.
+
 Connect to the "EMP" Virtual database using JDBC, ODBC, or the protocol you prefer, by pointing to the HAProxy's IP and port (JDBC=31000, ODBC=35433, OData=8080).
 
 Now play around... and yes you are allowed to stop one server, start it back and stop the other one, and so on and so on.
