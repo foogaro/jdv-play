@@ -21,7 +21,7 @@ It's important that we all speak the same language, or at least we mean the same
 | DML       | It stands for **D**ata **M**anipulation **L**anguage, it is used for managing data within schema objects. |
 | NOSQL     | It stands for **N**ot **O**nly **SQL**, it is a kind of a database, which provides a mechanism for storage and retrieval of data which is modeled in means other than the tabular relations used in relational databases. |
 | JDV       | It stands for JBoss Data Virtualization. [See more](#Overview)|
-| DV        | It stands for Data Virtualization, it is used as synonimous of JDV. |
+| DV        | It stands for Data Virtualization, it is used as synonymous of JDV. |
 | Image     | It's meant to be the software stack, that will compose a runtime environment. In our scenario, it's meant to be a Docker image. |
 | Container | It's meant to be a Linux container, based on a spefici image. In our scenario a Docker container. |
 | Host      | It's meant to be the server running this repo, thus hosting Docker's image repository. |
@@ -119,30 +119,78 @@ First we will create a data container to store our database. Doing so, any updat
 Then, we will run a mysql container linking the data container. Once done, we will run the script to create and populate our database.
 I took the database from XXX's repo.
 
-### Data container
+### Build the data container
 ```bash
-./mysql_data.create
+docker build -f mysql_data.dockerfile -t foogaro/mysql_data .
 ```
+The above command is wrapped into the __mysql_data.build__ file.
 
-
-### Run MySQL
+### Create the data container
 ```bash
-./mysql.run
+docker create --name mysql_data foogaro/mysql_data
 ```
+The above command is wrapped into the __mysql_data.create__ file.
 
+### Run MySQL linking the data container
+```bash
+docker run -it --rm=true --name="mysql" --net="jdv" --volumes-from mysql_data -v /jdv-play/mysql/var/lib/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mysql
+```
+The above command is wrapped into the __mysql_data.create__ file.
 
 ### Create and populate database
+It's gonna be tricky (and I'm pretty sure it's because of me)
+
 ```bash
-./mysql_data.load
+cp employees.ddl var/lib/mysql/
+unzip mysql-load-departments.zip -d var/lib/mysql/
+unzip mysql-load-dept-emp.zip -d var/lib/mysql/
+unzip mysql-load-dept-manager.zip -d var/lib/mysql/
+unzip mysql-load-employees.zip -d var/lib/mysql/
+unzip mysql-load-salaries.zip -d var/lib/mysql/
+unzip mysql-load-titles.zip -d var/lib/mysql/
+```
+The above commands are wrapped into the __mysql_data.load__ file.
+
+It will just place DML files into the shared volume, so you can have the loading phase within the mysql container as follows:
+
+```bash
+docker exec -ti mysql /bin/bash
 ```
 
+Now inside the mysql container execute the following:
+
+```bash
+mysql -u root -proot < /var/lib/mysql/employees.ddl
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-departments.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-dept-emp.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-dept-manager.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-employees.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-salaries1.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-salaries2.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-salaries3.dml
+mysql -u root -proot employees < /var/lib/mysql/mysql-load-titles.dml
+```
+
+Unfortunately the following docker command didn't work:
+```bash
+docker exec -ti mysql mysql -u root -proot < /var/lib/mysql/employees.ddl
+```
+or
+
+```bash
+docker exec -ti mysql "mysql -u root -proot < /var/lib/mysql/employees.ddl"
+```
+
+Not even the mysql-command wrapped into a executable file!
+I spent an afternoon, and it didn't work!
+Please send me a PR with the fix!
 
 ### Client SQL 
-Now, if the 3 steps above was successfully processed, you can have a look at the database with your favorite SQL client, and you should have the foolowing schema:
+Now, if the steps above were successfully, you can have a look at the database with your favorite SQL client, and you should have the following schema:
 
 ![alt text][ref-employees-db]
 
-And the copunt for each table should be as follows:
+And the count for each table should be as follows:
 
 | Schema        | Tables        | Count     |
 | --------------|---------------| ---------:|
@@ -281,6 +329,7 @@ IHIH,
 Ciao,
 
 Luigi
+
 
 
 [ref-employees-db]: https://github.com/foogaro/jdv-play/db.png "Employees database reference"
