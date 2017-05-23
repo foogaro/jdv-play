@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+cp employees.ddl var/lib/mysql/
+unzip mysql-load-departments.zip -d var/lib/mysql/
+unzip mysql-load-dept-emp.zip -d var/lib/mysql/
+unzip mysql-load-dept-manager.zip -d var/lib/mysql/
+unzip mysql-load-employees.zip -d var/lib/mysql/
+unzip mysql-load-salaries.zip -d var/lib/mysql/
+unzip mysql-load-titles.zip -d var/lib/mysql/
+
+docker exec -ti mysql "/bin/bash mysql -u root -proot < /var/lib/mysql/employees.ddl"
+
