@@ -260,7 +260,8 @@ docker exec -t jdv2 /opt/rh/configure.sh
 I'm not going to describe how to import database metadata, create views and all.
 In the reposiroty you can find the JBDS project into the workspace folder named _ws-jdv-play_. Have a look at it, and feel free to change and update whatever you want.
 
-## HAProxy
+
+## Proxy
 HAProxy is free, open source software that provides a high availability load balancer and proxy server for TCP and HTTP-based applications that spreads requests across multiple servers.
 
 ### Build the image
