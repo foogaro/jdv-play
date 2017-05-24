@@ -261,8 +261,109 @@ I'm not going to describe how to import database metadata, create views and all.
 In the reposiroty you can find the JBDS project into the workspace folder named _ws-jdv-play_. Have a look at it, and feel free to change and update whatever you want.
 
 
-## Proxy
+# HAProxy
 HAProxy is free, open source software that provides a high availability load balancer and proxy server for TCP and HTTP-based applications that spreads requests across multiple servers.
+
+### The haproxy.cfg configuration file
+```bash
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+
+defaults
+    mode                    tcp
+    log                     global
+    option                  tcplog
+    option                  dontlognull
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+
+frontend http-proxy
+    mode http
+    option httplog
+    bind *:80
+    #bind *:443 ssl crt /etc/pki/haproxy/haproxy.pem no-sslv3
+    use_backend http-stats      if { ssl_fc_sni stats.employees.com }
+    use_backend http-odata      if { ssl_fc_sni odata.employees.com }
+    use_backend http-dashboard  if { ssl_fc_sni dashb.employees.com }
+    default_backend http-stats
+
+frontend jdbc-proxy
+    mode tcp
+    option tcplog
+    option tcpka
+    option socket-stats
+    timeout client 120m
+    bind *:31000
+    #bind *:31000 ssl crt /etc/pki/haproxy/haproxy.pem
+    use_backend jdbc-employees
+
+frontend odbc-proxy
+    mode tcp
+    option tcplog
+    option tcpka
+    option socket-stats
+    timeout client 120m
+    bind *:35432
+    use_backend odbc-employees
+
+
+backend http-stats
+    mode http
+    stats enable
+    stats realm Haproxy\ Statistics
+    stats uri /
+    stats auth admin:haproxy.2017
+    server haproxy 172.18.0.5:80 check
+
+backend http-odata
+    mode http
+    option httpclose
+    balance roundrobin
+    server jdv1 172.18.0.3:8080 check
+    server jdv2 172.18.0.4:8080 check
+
+backend http-dashboard
+    mode http
+    option forwardfor
+    balance roundrobin
+    option httpclose
+    acl has_path_dashboard path_beg /dashboard
+    http-request redirect code 302 location http://%[hdr(host)]/dashboard/ unless has_path_dashboard
+    server jdv1 172.18.0.3:8080 check
+    server jdv2 172.18.0.4:8080 check
+
+backend jdbc-employees
+    #balance leastconn
+    balance roundrobin
+    timeout queue 120m
+    timeout server 120m
+    server jdv1 172.18.0.3:31000 check
+    server jdv2 172.18.0.4:31000 check
+
+backend odbc-employees
+    #balance leastconn
+    balance roundrobin
+    timeout queue 120m
+    timeout server 120m
+    server jdv1 172.18.0.3:35432 check
+    server jdv2 172.18.0.4:35432 check
+```
 
 ### Build the image
 ```bash
