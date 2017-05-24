@@ -1,3 +1,10 @@
+# Incipit
+
+Load balancing JBoss Data Virtualization using HAProxy.
+The environment is totally based on Docker.
+Everything can be scripted and automated.
+
+
 # Terminology
 
 First things first.
