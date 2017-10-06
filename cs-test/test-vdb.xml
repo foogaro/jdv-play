@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vdb name="test" version="1">
+<description/>
+<property name="validationDateTime" value="Wed Oct 18 12:48:10 CEST 2017"/>
+<property name="validationVersion" value="9.0.0"/>
+<model name="PGSQL_ICT_DS_buttalapenna">
+<source connection-jndi-name="PGSQL_ICT_DS" name="PGSQL_ICT_DS_buttalapenna" translator-name="postgresql"/>
+<metadata type="DDL"><![CDATA[
+
+CREATE FOREIGN TABLE blp_comunicazioni (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NAMEINSOURCE '"attivo"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	codice string(255) OPTIONS(NAMEINSOURCE '"codice"', NATIVE_TYPE 'varchar'),
+	comunicazionepadre_uuid string(255) OPTIONS(NAMEINSOURCE '"comunicazionepadre_uuid"', NATIVE_TYPE 'varchar'),
+	datainvio timestamp OPTIONS(NAMEINSOURCE '"datainvio"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	dataricezione timestamp OPTIONS(NAMEINSOURCE '"dataricezione"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	descrizione string(255) OPTIONS(NAMEINSOURCE '"descrizione"', NATIVE_TYPE 'varchar'),
+	destinatario string(255) OPTIONS(NAMEINSOURCE '"destinatario"', NATIVE_TYPE 'varchar'),
+	destinatariohash string(255) OPTIONS(NAMEINSOURCE '"destinatariohash"', NATIVE_TYPE 'varchar'),
+	indice integer OPTIONS(NAMEINSOURCE '"indice"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	mittente string(255) OPTIONS(NAMEINSOURCE '"mittente"', NATIVE_TYPE 'varchar'),
+	mittentemail string(255) OPTIONS(NAMEINSOURCE '"mittentemail"', NATIVE_TYPE 'varchar'),
+	testo string(255) OPTIONS(NAMEINSOURCE '"testo"', NATIVE_TYPE 'varchar'),
+	titolo string(255) OPTIONS(NAMEINSOURCE '"titolo"', NATIVE_TYPE 'varchar'),
+	ucsid long OPTIONS(NAMEINSOURCE '"ucsid"', NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	nomecognome string(255) OPTIONS(NAMEINSOURCE '"nomecognome"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_comunicazioni_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_comunicazioni_pkey"'),
+	CONSTRAINT fkl05yn5qyvcjt8ptvl6gf97otb FOREIGN KEY(comunicazionepadre_uuid) REFERENCES blp_comunicazioni(uuid) OPTIONS(NAMEINSOURCE '"fkl05yn5qyvcjt8ptvl6gf97otb"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_comunicazioni"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_notifiche (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	a string(255) OPTIONS(NAMEINSOURCE '"a"', NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NAMEINSOURCE '"attivo"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	canale string(255) OPTIONS(NAMEINSOURCE '"canale"', NATIVE_TYPE 'varchar'),
+	da string(255) OPTIONS(NAMEINSOURCE '"da"', NATIVE_TYPE 'varchar'),
+	riferimentoext string(255) OPTIONS(NAMEINSOURCE '"riferimentoext"', NATIVE_TYPE 'varchar'),
+	testo string(255) OPTIONS(NAMEINSOURCE '"testo"', NATIVE_TYPE 'varchar'),
+	tipologiaext string(255) OPTIONS(NAMEINSOURCE '"tipologiaext"', NATIVE_TYPE 'varchar'),
+	titolo string(255) OPTIONS(NAMEINSOURCE '"titolo"', NATIVE_TYPE 'varchar'),
+	ucsid long OPTIONS(NAMEINSOURCE '"ucsid"', NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_notifiche_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_notifiche_pkey"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_notifiche"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_richieste (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NAMEINSOURCE '"attivo"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	authhash string(255) OPTIONS(NAMEINSOURCE '"authhash"', NATIVE_TYPE 'varchar'),
+	autorizzazioneautomatica boolean OPTIONS(NAMEINSOURCE '"autorizzazioneautomatica"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	codice string(255) OPTIONS(NAMEINSOURCE '"codice"', NATIVE_TYPE 'varchar'),
+	codicefiscale string(255) OPTIONS(NAMEINSOURCE '"codicefiscale"', NATIVE_TYPE 'varchar'),
+	datarichiesta timestamp OPTIONS(NAMEINSOURCE '"datarichiesta"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	datasollecito timestamp OPTIONS(NAMEINSOURCE '"datasollecito"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	descrizione string(255) OPTIONS(NAMEINSOURCE '"descrizione"', NATIVE_TYPE 'varchar'),
+	feriepermesso_uuid string(255) OPTIONS(NAMEINSOURCE '"feriepermesso_uuid"', NATIVE_TYPE 'varchar'),
+	indice integer OPTIONS(NAMEINSOURCE '"indice"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	matricola string(255) OPTIONS(NAMEINSOURCE '"matricola"', NATIVE_TYPE 'varchar'),
+	note string(255) OPTIONS(NAMEINSOURCE '"note"', NATIVE_TYPE 'varchar'),
+	notifichehash string(255) OPTIONS(NAMEINSOURCE '"notifichehash"', NATIVE_TYPE 'varchar'),
+	operazione string(255) OPTIONS(NAMEINSOURCE '"operazione"', NATIVE_TYPE 'varchar'),
+	orepreavviso bigdecimal OPTIONS(NAMEINSOURCE '"orepreavviso"', NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	oresilenzioassenso bigdecimal OPTIONS(NAMEINSOURCE '"oresilenzioassenso"', NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	richiestaoriginale_uuid string(255) OPTIONS(NAMEINSOURCE '"richiestaoriginale_uuid"', NATIVE_TYPE 'varchar'),
+	scadenzasilenzioassenso timestamp OPTIONS(NAMEINSOURCE '"scadenzasilenzioassenso"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	stato string(255) OPTIONS(NAMEINSOURCE '"stato"', NATIVE_TYPE 'varchar'),
+	urgente boolean NOT NULL OPTIONS(NAMEINSOURCE '"urgente"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	usermail string(255) OPTIONS(NAMEINSOURCE '"usermail"', NATIVE_TYPE 'varchar'),
+	mittente string(255) OPTIONS(NAMEINSOURCE '"mittente"', NATIVE_TYPE 'varchar'),
+	richiestaprecedente_uuid string(255) OPTIONS(NAMEINSOURCE '"richiestaprecedente_uuid"', NATIVE_TYPE 'varchar'),
+	richiestapadre_uuid string(255) OPTIONS(NAMEINSOURCE '"richiestapadre_uuid"', NATIVE_TYPE 'varchar'),
+	numeroperiodiminimo integer OPTIONS(NAMEINSOURCE '"numeroperiodiminimo"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	numeroperiodimassimo integer OPTIONS(NAMEINSOURCE '"numeroperiodimassimo"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	nomecognome string(255) OPTIONS(NAMEINSOURCE '"nomecognome"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_richieste_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_richieste_pkey"'),
+	CONSTRAINT fkecd15qgpmcbdm4xm31ac7tstq FOREIGN KEY(richiestaprecedente_uuid) REFERENCES blp_richieste(uuid) OPTIONS(NAMEINSOURCE '"fkecd15qgpmcbdm4xm31ac7tstq"'),
+	CONSTRAINT fkawwyw5fskvyl6aqiwjwvkub7y FOREIGN KEY(feriepermesso_uuid) REFERENCES blp_ferie_permessi(uuid) OPTIONS(NAMEINSOURCE '"fkawwyw5fskvyl6aqiwjwvkub7y"'),
+	CONSTRAINT fkt0ec8v0g1gtddu2gpevx28kav FOREIGN KEY(richiestaoriginale_uuid) REFERENCES blp_richieste(uuid) OPTIONS(NAMEINSOURCE '"fkt0ec8v0g1gtddu2gpevx28kav"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_richieste"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_tipi_comunicazione (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NAMEINSOURCE '"attivo"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	cantiere string(255) OPTIONS(NAMEINSOURCE '"cantiere"', NATIVE_TYPE 'varchar'),
+	codice string(255) OPTIONS(NAMEINSOURCE '"codice"', NATIVE_TYPE 'varchar'),
+	commessa string(255) OPTIONS(NAMEINSOURCE '"commessa"', NATIVE_TYPE 'varchar'),
+	descrizione string(255) OPTIONS(NAMEINSOURCE '"descrizione"', NATIVE_TYPE 'varchar'),
+	destinatariohash string(255) OPTIONS(NAMEINSOURCE '"destinatariohash"', NATIVE_TYPE 'varchar'),
+	wbs string(255) OPTIONS(NAMEINSOURCE '"wbs"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_tipi_comunicazione_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_tipi_comunicazione_pkey"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_tipi_comunicazione"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_tipi_richiesta (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NAMEINSOURCE '"attivo"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	authhash string(255) OPTIONS(NAMEINSOURCE '"authhash"', NATIVE_TYPE 'varchar'),
+	autorizzazioneautomatica boolean NOT NULL OPTIONS(NAMEINSOURCE '"autorizzazioneautomatica"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	cantiere string(255) OPTIONS(NAMEINSOURCE '"cantiere"', NATIVE_TYPE 'varchar'),
+	codice string(255) OPTIONS(NAMEINSOURCE '"codice"', NATIVE_TYPE 'varchar'),
+	commessa string(255) OPTIONS(NAMEINSOURCE '"commessa"', NATIVE_TYPE 'varchar'),
+	descrizione string(255) OPTIONS(NAMEINSOURCE '"descrizione"', NATIVE_TYPE 'varchar'),
+	modificabile boolean NOT NULL OPTIONS(NAMEINSOURCE '"modificabile"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	notificahash string(255) OPTIONS(NAMEINSOURCE '"notificahash"', NATIVE_TYPE 'varchar'),
+	numeroperiodi integer OPTIONS(NAMEINSOURCE '"numeroperiodi"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	orepreavviso bigdecimal OPTIONS(NAMEINSOURCE '"orepreavviso"', NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	orepreavvisomodifica bigdecimal OPTIONS(NAMEINSOURCE '"orepreavvisomodifica"', NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	oresilenzioassenso bigdecimal OPTIONS(NAMEINSOURCE '"oresilenzioassenso"', NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	wbs string(255) OPTIONS(NAMEINSOURCE '"wbs"', NATIVE_TYPE 'varchar'),
+	numeroperiodimassimo integer OPTIONS(NAMEINSOURCE '"numeroperiodimassimo"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	numeroperiodiminimo integer OPTIONS(NAMEINSOURCE '"numeroperiodiminimo"', NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_tipi_richiesta_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_tipi_richiesta_pkey"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_tipi_richiesta"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_utenti_mobile (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	codicefiscale string(255) OPTIONS(NAMEINSOURCE '"codicefiscale"', NATIVE_TYPE 'varchar'),
+	matricolaprovv string(255) OPTIONS(NAMEINSOURCE '"matricolaprovv"', NATIVE_TYPE 'varchar'),
+	ultimologin timestamp OPTIONS(NAMEINSOURCE '"ultimologin"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_utenti_mobile_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_utenti_mobile_pkey"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_utenti_mobile"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_periodi_richiesta (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	a timestamp OPTIONS(NAMEINSOURCE '"a"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	da timestamp OPTIONS(NAMEINSOURCE '"da"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	richiesta_uuid string(255) OPTIONS(NAMEINSOURCE '"richiesta_uuid"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_periodi_richiesta_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_periodi_richiesta_pkey"'),
+	CONSTRAINT fkgac2041u6vkui0uesqnfexxid FOREIGN KEY(richiesta_uuid) REFERENCES blp_richieste(uuid) OPTIONS(NAMEINSOURCE '"fkgac2041u6vkui0uesqnfexxid"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_periodi_richiesta"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_risposte_richiesta (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	nuovarichiesta_uuid string(255) OPTIONS(NAMEINSOURCE '"nuovarichiesta_uuid"', NATIVE_TYPE 'varchar'),
+	organigrammaruoli_id long OPTIONS(NAMEINSOURCE '"organigrammaruoli_id"', NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	richiesta_uuid string(255) OPTIONS(NAMEINSOURCE '"richiesta_uuid"', NATIVE_TYPE 'varchar'),
+	stato string(255) OPTIONS(NAMEINSOURCE '"stato"', NATIVE_TYPE 'varchar'),
+	organigrammaruolo_id long OPTIONS(NAMEINSOURCE '"organigrammaruolo_id"', NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_risposte_richiesta_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_risposte_richiesta_pkey"'),
+	CONSTRAINT fkpsmr4k3s3p6uubxgtbc3cr90v FOREIGN KEY(richiesta_uuid) REFERENCES blp_richieste(uuid) OPTIONS(NAMEINSOURCE '"fkpsmr4k3s3p6uubxgtbc3cr90v"'),
+	CONSTRAINT fk76roolb05013rf7c4bw74oo17 FOREIGN KEY(nuovarichiesta_uuid) REFERENCES blp_richieste(uuid) OPTIONS(NAMEINSOURCE '"fk76roolb05013rf7c4bw74oo17"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_risposte_richiesta"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE blp_ferie_permessi (
+	uuid string(255) NOT NULL OPTIONS(NAMEINSOURCE '"uuid"', NATIVE_TYPE 'varchar'),
+	a timestamp OPTIONS(NAMEINSOURCE '"a"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	attivo boolean NOT NULL OPTIONS(NAMEINSOURCE '"attivo"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	codice string(255) OPTIONS(NAMEINSOURCE '"codice"', NATIVE_TYPE 'varchar'),
+	da timestamp OPTIONS(NAMEINSOURCE '"da"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	descrizione string(255) OPTIONS(NAMEINSOURCE '"descrizione"', NATIVE_TYPE 'varchar'),
+	matricola string(255) OPTIONS(NAMEINSOURCE '"matricola"', NATIVE_TYPE 'varchar'),
+	modificabile boolean NOT NULL OPTIONS(NAMEINSOURCE '"modificabile"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	orepreavvisomodifica bigdecimal OPTIONS(NAMEINSOURCE '"orepreavvisomodifica"', NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	periodorichiesta_uuid string(255) OPTIONS(NAMEINSOURCE '"periodorichiesta_uuid"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_ferie_permessi_pkey PRIMARY KEY(uuid) OPTIONS(NAMEINSOURCE '"blp_ferie_permessi_pkey"'),
+	CONSTRAINT fk61fwlx7jqjuvp3o2kgo9mvdh4 FOREIGN KEY(periodorichiesta_uuid) REFERENCES blp_periodi_richiesta(uuid) OPTIONS(NAMEINSOURCE '"fk61fwlx7jqjuvp3o2kgo9mvdh4"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."blp_ferie_permessi"', UPDATABLE 'TRUE');
+
+CREATE FOREIGN TABLE jboss_ejb_timer (
+	id string(4000) NOT NULL OPTIONS(NAMEINSOURCE '"id"', NATIVE_TYPE 'varchar'),
+	timed_object_id string(4000) NOT NULL OPTIONS(NAMEINSOURCE '"timed_object_id"', NATIVE_TYPE 'varchar'),
+	initial_date timestamp OPTIONS(NAMEINSOURCE '"initial_date"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	repeat_interval long OPTIONS(NAMEINSOURCE '"repeat_interval"', NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	next_date timestamp OPTIONS(NAMEINSOURCE '"next_date"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	previous_run timestamp OPTIONS(NAMEINSOURCE '"previous_run"', NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	primary_key string(4000) OPTIONS(NAMEINSOURCE '"primary_key"', NATIVE_TYPE 'varchar'),
+	info string(2147483647) OPTIONS(NAMEINSOURCE '"info"', NATIVE_TYPE 'text'),
+	timer_state string(4000) OPTIONS(NAMEINSOURCE '"timer_state"', NATIVE_TYPE 'varchar'),
+	schedule_expr_second string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_second"', NATIVE_TYPE 'varchar'),
+	schedule_expr_minute string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_minute"', NATIVE_TYPE 'varchar'),
+	schedule_expr_hour string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_hour"', NATIVE_TYPE 'varchar'),
+	schedule_expr_day_of_week string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_day_of_week"', NATIVE_TYPE 'varchar'),
+	schedule_expr_day_of_month string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_day_of_month"', NATIVE_TYPE 'varchar'),
+	schedule_expr_month string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_month"', NATIVE_TYPE 'varchar'),
+	schedule_expr_year string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_year"', NATIVE_TYPE 'varchar'),
+	schedule_expr_start_date string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_start_date"', NATIVE_TYPE 'varchar'),
+	schedule_expr_end_date string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_end_date"', NATIVE_TYPE 'varchar'),
+	schedule_expr_timezone string(4000) OPTIONS(NAMEINSOURCE '"schedule_expr_timezone"', NATIVE_TYPE 'varchar'),
+	auto_timer boolean OPTIONS(NAMEINSOURCE '"auto_timer"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	timeout_method_declaring_class string(4000) OPTIONS(NAMEINSOURCE '"timeout_method_declaring_class"', NATIVE_TYPE 'varchar'),
+	timeout_method_name string(4000) OPTIONS(NAMEINSOURCE '"timeout_method_name"', NATIVE_TYPE 'varchar'),
+	timeout_method_descriptor string(4000) OPTIONS(NAMEINSOURCE '"timeout_method_descriptor"', NATIVE_TYPE 'varchar'),
+	calendar_timer boolean OPTIONS(NAMEINSOURCE '"calendar_timer"', NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	partition_name string(4000) NOT NULL OPTIONS(NAMEINSOURCE '"partition_name"', NATIVE_TYPE 'varchar'),
+	node_name string(4000) OPTIONS(NAMEINSOURCE '"node_name"', NATIVE_TYPE 'varchar'),
+	CONSTRAINT jboss_ejb_timer_pkey PRIMARY KEY(id) OPTIONS(NAMEINSOURCE '"jboss_ejb_timer_pkey"')
+) OPTIONS(NAMEINSOURCE '"buttalapenna"."jboss_ejb_timer"', UPDATABLE 'TRUE');
+
+]]></metadata>
+</model>
+<model name="buttalapenna_vl" type="VIRTUAL">
+<property name="imports" value="PGSQL_ICT_DS_buttalapenna"/>
+<metadata type="DDL"><![CDATA[
+
+CREATE VIEW blp_comunicazioni (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	codice string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	comunicazionepadre_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	datainvio timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	dataricezione timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	descrizione string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	destinatario string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	destinatariohash string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	indice integer OPTIONS(NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	mittente string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	mittentemail string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	testo string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	titolo string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	ucsid long OPTIONS(NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	nomecognome string(255),
+	CONSTRAINT blp_comunicazioni_pkey PRIMARY KEY(uuid),
+	CONSTRAINT fkl05yn5qyvcjt8ptvl6gf97otb FOREIGN KEY(comunicazionepadre_uuid) REFERENCES blp_comunicazioni(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_comunicazioni;
+
+CREATE VIEW blp_notifiche (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	a string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	canale string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	da string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	riferimentoext string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	testo string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	tipologiaext string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	titolo string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	ucsid long OPTIONS(NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_notifiche_pkey PRIMARY KEY(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_notifiche;
+
+CREATE VIEW blp_richieste (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	authhash string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	autorizzazioneautomatica boolean OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	codice string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	codicefiscale string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	datarichiesta timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	datasollecito timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	descrizione string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	feriepermesso_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	indice integer OPTIONS(NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	matricola string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	note string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	notifichehash string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	operazione string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	orepreavviso bigdecimal OPTIONS(NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	oresilenzioassenso bigdecimal OPTIONS(NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	richiestaoriginale_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	scadenzasilenzioassenso timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	stato string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	urgente boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	usermail string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	mittente string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	richiestaprecedente_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	richiestapadre_uuid string(255),
+	numeroperiodiminimo integer OPTIONS(FIXED_LENGTH 'TRUE'),
+	numeroperiodimassimo integer OPTIONS(FIXED_LENGTH 'TRUE'),
+	nomecognome string(255),
+	CONSTRAINT blp_richieste_pkey PRIMARY KEY(uuid),
+	CONSTRAINT fkecd15qgpmcbdm4xm31ac7tstq FOREIGN KEY(richiestaprecedente_uuid) REFERENCES blp_richieste(uuid),
+	CONSTRAINT fkawwyw5fskvyl6aqiwjwvkub7y FOREIGN KEY(feriepermesso_uuid) REFERENCES blp_ferie_permessi(uuid),
+	CONSTRAINT fkt0ec8v0g1gtddu2gpevx28kav FOREIGN KEY(richiestaoriginale_uuid) REFERENCES blp_richieste(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_richieste;
+
+CREATE VIEW blp_tipi_comunicazione (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	cantiere string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	codice string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	commessa string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	descrizione string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	destinatariohash string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	wbs string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_tipi_comunicazione_pkey PRIMARY KEY(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_tipi_comunicazione;
+
+CREATE VIEW blp_tipi_richiesta (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	attivo boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	authhash string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	autorizzazioneautomatica boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	cantiere string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	codice string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	commessa string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	descrizione string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	modificabile boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	notificahash string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	numeroperiodi integer OPTIONS(NATIVE_TYPE 'int4', FIXED_LENGTH 'TRUE'),
+	orepreavviso bigdecimal OPTIONS(NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	orepreavvisomodifica bigdecimal OPTIONS(NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	oresilenzioassenso bigdecimal OPTIONS(NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	wbs string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	numeroperiodimassimo integer OPTIONS(FIXED_LENGTH 'TRUE'),
+	numeroperiodiminimo integer OPTIONS(FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_tipi_richiesta_pkey PRIMARY KEY(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_tipi_richiesta;
+
+CREATE VIEW blp_utenti_mobile (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	codicefiscale string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	matricolaprovv string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	ultimologin timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_utenti_mobile_pkey PRIMARY KEY(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_utenti_mobile;
+
+CREATE VIEW blp_periodi_richiesta (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	a timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	da timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	richiesta_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_periodi_richiesta_pkey PRIMARY KEY(uuid),
+	CONSTRAINT fkgac2041u6vkui0uesqnfexxid FOREIGN KEY(richiesta_uuid) REFERENCES blp_richieste(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_periodi_richiesta;
+
+CREATE VIEW blp_risposte_richiesta (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	nuovarichiesta_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	organigrammaruoli_id long OPTIONS(NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	richiesta_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	stato string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	organigrammaruolo_id long OPTIONS(NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	CONSTRAINT blp_risposte_richiesta_pkey PRIMARY KEY(uuid),
+	CONSTRAINT fkpsmr4k3s3p6uubxgtbc3cr90v FOREIGN KEY(richiesta_uuid) REFERENCES blp_richieste(uuid),
+	CONSTRAINT fk76roolb05013rf7c4bw74oo17 FOREIGN KEY(nuovarichiesta_uuid) REFERENCES blp_richieste(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_risposte_richiesta;
+
+CREATE VIEW blp_ferie_permessi (
+	uuid string(255) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	a timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	attivo boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	codice string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	da timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	descrizione string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	matricola string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	modificabile boolean NOT NULL OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	orepreavvisomodifica bigdecimal OPTIONS(NATIVE_TYPE 'numeric', FIXED_LENGTH 'TRUE'),
+	periodorichiesta_uuid string(255) OPTIONS(NATIVE_TYPE 'varchar'),
+	CONSTRAINT blp_ferie_permessi_pkey PRIMARY KEY(uuid),
+	CONSTRAINT fk61fwlx7jqjuvp3o2kgo9mvdh4 FOREIGN KEY(periodorichiesta_uuid) REFERENCES blp_periodi_richiesta(uuid)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.blp_ferie_permessi;
+
+CREATE VIEW jboss_ejb_timer (
+	id string(4000) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	timed_object_id string(4000) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	initial_date timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	repeat_interval long OPTIONS(NATIVE_TYPE 'int8', FIXED_LENGTH 'TRUE'),
+	next_date timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	previous_run timestamp OPTIONS(NATIVE_TYPE 'timestamp', FIXED_LENGTH 'TRUE'),
+	primary_key string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	info string(2147483647) OPTIONS(NATIVE_TYPE 'text'),
+	timer_state string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_second string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_minute string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_hour string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_day_of_week string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_day_of_month string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_month string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_year string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_start_date string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_end_date string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	schedule_expr_timezone string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	auto_timer boolean OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	timeout_method_declaring_class string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	timeout_method_name string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	timeout_method_descriptor string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	calendar_timer boolean OPTIONS(NATIVE_TYPE 'bool', FIXED_LENGTH 'TRUE'),
+	partition_name string(4000) NOT NULL OPTIONS(NATIVE_TYPE 'varchar'),
+	node_name string(4000) OPTIONS(NATIVE_TYPE 'varchar'),
+	CONSTRAINT jboss_ejb_timer_pkey PRIMARY KEY(id)
+) OPTIONS(UPDATABLE 'TRUE') 
+AS
+	SELECT * FROM PGSQL_ICT_DS_buttalapenna.jboss_ejb_timer;
+
+]]></metadata>
+</model>
+</vdb>
